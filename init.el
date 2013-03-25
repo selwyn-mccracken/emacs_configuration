@@ -54,7 +54,7 @@
 
 (load-theme 'zenburn t)
 
-;;(add-to-list 'load-path "~/srcbuilds/pig-mode/")
+;;(add-to-list 'load-path "~/.emacs.d/pig-mode/")
 (require 'pig-mode)
 
 (require 'scala-mode2)
@@ -76,7 +76,7 @@
 (global-set-key (kbd "<C-tab>") 'bury-buffer)
 
 ;;R stuff
-;;(load "~/.R_stuff/ess-5.11/lisp/ess-site")
+(load "~/.emacs.d/selwyn/ESS/lisp/ess-site")
 (ess-toggle-underscore nil)
 (define-key ess-mode-map "\C-l" 'ess-eval-line-and-step)
 (define-key ess-mode-map [(control return)] 'ess-eval-line-and-step)

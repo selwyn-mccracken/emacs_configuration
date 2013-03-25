@@ -1,9 +1,9 @@
 
 ;; ----- smex-history -----
 (
+ R
  recover-file
  shell
- R
  cd
  5x5
  arp
@@ -12,7 +12,7 @@
 
 ;; ----- smex-data -----
 (
- (R . 1)
+ (R . 2)
  (shell . 4)
  (ensime . 1)
  (recover-file . 1)
