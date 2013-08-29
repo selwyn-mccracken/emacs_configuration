@@ -76,7 +76,8 @@
 (global-set-key (kbd "<C-tab>") 'bury-buffer)
 
 ;;R stuff
-(load "~/.emacs.d/selwyn/ESS/lisp/ess-site")
+(require 'ess-site)
+;;(load "~/.emacs.d/selwyn/ESS/lisp/ess-site")
 (ess-toggle-underscore nil)
 (define-key ess-mode-map "\C-l" 'ess-eval-line-and-step)
 (define-key ess-mode-map [(control return)] 'ess-eval-line-and-step)
@@ -89,16 +90,41 @@
 (define-key ess-mode-map "\C-r" 'send-region-to-R)
 (setq ess-ask-for-ess-directory nil)
 
+;; polymode so can combine R code with markdown in Rmd files
+(setq load-path
+      (append '("/home/selwyn/.emacs.d/selwyn/polymode/"  "/home/selwyn/.emacs.d/selwyn/polymode/modes")
+              load-path))
+
+(require 'poly-R)
+(require 'poly-markdown)
+
+;;               
+;; from: http://rstudio-pubs-static.s3.amazonaws.com/2246_f78ac20295054967916c7855d3610317.html
+(defun ess-knit2html ()
+  "Run knit2html R function on the current .Rmd file"
+  (interactive)
+  (ess-swv-run-in-R "require(knitr) ; require(markdown) ; knit2html")
+)              
+              
+(defun ess-knit2pdf ()
+  "Run knit2pdf R function on the current .Rmd file"
+  (interactive)
+  (ess-swv-run-in-R "require(knitr) ; require(markdown) ; knit2pdf")
+)              
+
+              
 ;;http://stackoverflow.com/questions/6286579/emacs-shell-mode-how-to-send-region-to-shell
 (defun sh-send-line-or-region (&optional step)
   (interactive ())
-  (let ((proc (get-process "shell"))
+;;  (let ((proc (get-process "shell"))
+  (let ((proc (get-process "*SQL*"))
         pbuf min max command)
     (unless proc
       (let ((currbuff (current-buffer)))
         (shell)
         (switch-to-buffer currbuff)
-        (setq proc (get-process "shell"))
+        ;;(setq proc (get-process "shell"))
+        (setq proc (get-process "*SQL*"))
         ))
     (setq pbuff (process-buffer proc))
     (if (use-region-p)
@@ -170,3 +196,154 @@
 
 ;;Align your code in a pretty way.
 (global-set-key (kbd "C-x \\") 'align-regexp)
+
+;;SQL stuff
+(eval-after-load "sql"
+      (load-library "sql-indent"))
+
+;;make long lines play nice - you can navigte  
+(defalias 'tt 'toggle-truncate-lines) 
+
+
+;; redshift connection via M-x sql-postgres
+;; (defun sql-get-login (&rest what) 
+;;   (setq sql-server "warehouse.ceh4g9e4mhbh.eu-west-1.redshift.amazonaws.com"
+;;         sql-user "smccracken"
+;;         sql-password "GxKsBVMLMmtqht3U"
+;;         sql-database "data"
+;;         sql-port 5439
+;;         ))
+
+;; connect to multiple databases in sql-mode
+;; http://speeves.erikin.com/2011/10/emacs-sql-mode-connect-to-multiple.html
+;; define a set of database conections
+;; not currently working as expected...
+;; (setq sql-connection-alist
+;;       '(
+;;         (pool-redshift
+;;          (sql-name "redshift")
+;;          (sql-product 'postgres)
+;;          (sql-server "warehouse.ceh4g9e4mhbh.eu-west-1.redshift.amazonaws.com")
+;;          (sql-user "smccracken")
+;;          (sql-password "GxKsBVMLMmtqht3U")
+;;          (sql-database "data")
+;;          (sql-port 5439)
+;;          )
+;;         (pool-pglocal
+;;          (sql-name "pglocal")
+;;          (sql-product 'postgres)
+;;          (sql-server "localhost")
+;;          (sql-user "selwyn")
+;;          (sql-password "")
+;;          (sql-database "selwyn")
+;;          (sql-port 5432)
+;;          )
+  
+;;         )
+;;       )
+
+;; (defun sql-pool-redshift ()
+;;   (interactive)
+;;   (sql-connect-preset 'redshift)
+;; )
+
+;; (defun sql-pool-pglocal ()
+;;   (interactive)
+;;   (sql-connect-preset 'pglocal)
+;; )
+
+;; ;; this makes all it all happen via M-x sql-pool-host1_db1, etc.
+;; (defun sql-connect-preset (name)
+;;   "Connect to a predefined SQL connection listed in `sql-connection-alist'"
+;;   (eval `(let ,(cdr (assoc name sql-connection-alist))
+;;            (flet ((sql-get-login (&rest what)))
+;;              (sql-product-interactive sql-product)))))
+
+;; ;; names the buffer *SQL: <host>_<db>, which is easier to 
+;; ;; find when you M-x list-buffers, or C-x C-b
+;; (defun sql-make-smart-buffer-name ()
+;;   "Return a string that can be used to rename a SQLi buffer.
+;;   This is used to set `sql-alternate-buffer-name' within
+;;   `sql-interactive-mode'."
+;;   (or (and (boundp 'sql-name) sql-name)
+;;       (concat (if (not(string= "" sql-server))
+;;                   (concat
+;;                    (or (and (string-match "[0-9.]+" sql-server) sql-server)
+;;                        (car (split-string sql-server "\\.")))
+;;                    "/"))
+;;               sql-database)))
+
+;; (add-hook 'sql-interactive-mode-hook
+;;           (lambda ()
+;;             (setq sql-alternate-buffer-name (sql-make-smart-buffer-name))
+;;             (sql-rename-buffer)))
+
+
+;;inspired by http://www.emacswiki.org/emacs/AlexSchroederConfigWindows
+(add-hook 'sql-mode-hook
+	  (lambda ()
+
+        (local-set-key (kbd "<C-return>") 'sql-send-region)
+
+        (local-set-key (kbd "<f5>") 'sql-send-region)
+        (local-set-key (kbd "<f6>") 'sql-send-buffer)
+        (local-set-key (kbd "<f4>") 'sql-send-paragraph)
+
+))
+
+
+
+
+
+;;markdown mode
+(autoload 'markdown-mode "markdown-mode"
+   "Major mode for editing Markdown files" t)
+(add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
+(add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
+(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
+;;(add-to-list 'auto-mode-alist '("\\.text\\'" . gfm-mode))
+;;(add-to-list 'auto-mode-alist '("\\.markdown\\'" . gfm-mode))
+;;(add-to-list 'auto-mode-alist '("\\.md\\'" . gfm-mode))
+
+;;(require 'realtime-markdown-viewer)
+
+;; connect to a specified db
+;; http://curiousprogrammer.wordpress.com/2009/04/16/dangerous-elisp/
+(defun pglocal ()
+  (interactive)
+  (let (
+        (sql-name "pglocal")
+        (sql-product 'postgres)
+        (sql-server "localhost")
+        (sql-user "selwyn")
+        (sql-password "")
+        (sql-database "selwyn")
+        (sql-port 5432)
+        )
+    (delete-other-windows)
+    (sql-postgres)
+    (other-window -1)
+    (switch-to-buffer "*sql*" t)
+    (sql-mode)
+    )
+  )
+
+
+(defun redshift ()
+  (interactive)
+  (let (      
+        (sql-name "redshift")
+        (sql-product 'postgres)
+        (sql-server "warehouse.ceh4g9e4mhbh.eu-west-1.redshift.amazonaws.com")
+        (sql-user "smccracken")
+        (sql-password "GxKsBVMLMmtqht3U")
+        (sql-database "data")
+        (sql-port 5439)     
+        )
+    (delete-other-windows)
+    (sql-postgres)
+    (other-window -1)
+    (switch-to-buffer "*sql*" t)
+    (sql-mode)
+    )
+  )

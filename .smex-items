@@ -1,19 +1,36 @@
 
 ;; ----- smex-history -----
 (
+ ess-knit2html
+ ess-swv-PDF
+ Rnw-mode
  R
- recover-file
- shell
- cd
- 5x5
- arp
- dbx
+ sql-postgres
+ toggle-truncate-lines
+ S
 )
 
 ;; ----- smex-data -----
 (
- (R . 2)
+ (R . 42)
  (shell . 4)
  (ensime . 1)
  (recover-file . 1)
+ (grep . 3)
+ (sql-postgres . 22)
+ (package-install . 2)
+ (sql-help . 1)
+ (S . 1)
+ (realtime-markdown-viewer-mode . 2)
+ (sql-local . 2)
+ (sql-interactive-mode-menu . 1)
+ (sql-pool-pglocal . 1)
+ (enter-db . 1)
+ (pglocal . 9)
+ (toggle-truncate-lines . 1)
+ (redshift . 3)
+ (poly-markdown+r-mode . 1)
+ (Rnw-mode . 1)
+ (ess-swv-PDF . 1)
+ (ess-knit2html . 1)
 )
