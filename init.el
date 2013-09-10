@@ -112,6 +112,16 @@
   (ess-swv-run-in-R "require(knitr) ; require(markdown) ; knit2pdf")
 )              
 
+
+;;Mac key bindings - http://stackoverflow.com/questi3ons/7231651/emacs-on-mac-os-x-lion-forward-delete 
+(global-set-key '[(kp-delete)] 'delete-char)
+(global-set-key '[(delete)] 'delete-char)
+(global-set-key '[(meta delete)] 'kill-word)
+(global-set-key '[(meta kp-delete)] 'kill-word)
+(global-set-key '[(control delete)] 'kill-word)
+(global-set-key '[(control kp-delete)] 'kill-word)
+(global-set-key (kbd "M-3") '(lambda () (interactive) (insert "#")))
+(setq mac-command-modifier 'control)
               
 ;;http://stackoverflow.com/questions/6286579/emacs-shell-mode-how-to-send-region-to-shell
 (defun sh-send-line-or-region (&optional step)
