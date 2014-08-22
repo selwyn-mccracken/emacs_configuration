@@ -14,6 +14,10 @@
 (setq inhibit-startup-message t)
 (setq backup-directory-alist '(("." . "~/.emacs-backups"))) ; stop leaving backup~ turds scattered everywhere
 
+;;isend set hook for python
+;; todo: hook so that the isend-associate *Python* is set automatically.
+(add-hook 'isend-mode-hook 'isend-default-python-setup)
+
 
 ;;rebind rectangle mark as I want to use C-return for R/ESS and
 (setq cua-rectangle-mark-key  [M-return])
@@ -78,3 +82,5 @@
 (global-set-key (kbd "C-M-s") 'isearch-forward)
 (global-set-key (kbd "C-M-r") 'isearch-backward)
 (global-set-key (kbd "C-M-%") 'query-replace)
+
+;;(add-to-list 'auto-mode-alist '("\\.py$" . python-mode))
