@@ -219,7 +219,7 @@
 ;; (defun sql-get-login (&rest what) 
 ;;   (setq sql-server "warehouse.ceh4g9e4mhbh.eu-west-1.redshift.amazonaws.com"
 ;;         sql-user "smccracken"
-;;         sql-password "GxKsBVMLMmtqht3U"
+;;         sql-password "XXXXX"
 ;;         sql-database "data"
 ;;         sql-port 5439
 ;;         ))
@@ -235,7 +235,7 @@
 ;;          (sql-product 'postgres)
 ;;          (sql-server "warehouse.ceh4g9e4mhbh.eu-west-1.redshift.amazonaws.com")
 ;;          (sql-user "smccracken")
-;;          (sql-password "GxKsBVMLMmtqht3U")
+;;          (sql-password "XXXXX")
 ;;          (sql-database "data")
 ;;          (sql-port 5439)
 ;;          )
@@ -346,7 +346,7 @@
         (sql-product 'postgres)
         (sql-server "warehouse.ceh4g9e4mhbh.eu-west-1.redshift.amazonaws.com")
         (sql-user "smccracken")
-        (sql-password "GxKsBVMLMmtqht3U")
+        (sql-password "XXXXX")
         (sql-database "data")
         (sql-port 5439)     
         )
